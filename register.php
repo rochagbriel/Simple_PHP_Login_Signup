@@ -11,6 +11,9 @@
         <input type="submit" name="submit" value="Submit">
     </form>
     <a href="index.php">Login</a>
+    <?php
+    echo '<p>test</p>'
+    ?>
 </body>
 </html>
 ```
