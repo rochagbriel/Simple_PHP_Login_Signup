@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Signup-Page</title>
+    <title>Signup-Page(Klassen)</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body> 
-    <div class="container">
-        <h2>Create your account:</h2>
+    <section class="container">
+        <h1>Create your account:</h1>
         <form id="registrationForm" onsubmit="return validateForm()" action="register.php" method="post">
             <label for="email">Email:</label>
             <input type="email" name="email" id="email" required><br>
@@ -17,10 +17,12 @@
             <label for="confirmPassword">Confirm Password:</label>
             <input type="password" name="confirmPassword" id="confirmPassword" required><br>
             
-            <input type="submit" value="Registar">
+            <input class="btn btn-input" type="submit" value="Submit">
+            <p id="errorText" class="error-text"></p>
+            <a class="link" href="login.html">Already have an account? Login here.</a>
         </form>
-        <p id="errorText" class="error-text"></p>
-    </div>
+        <a class="btn" href="index.php">Back to main menu</a>
+    </section>
 
     <script>
         function validateForm() {

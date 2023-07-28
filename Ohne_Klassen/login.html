@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login-Page</title>
+    <script src="login.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <section>
+        <h1>Login</h1>
+        <form id="loginForm" method="post" action="login.php" onsubmit="return validateForm()">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required><br>
+
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required><br>
+
+            <input class="btn btn-input" type="submit" value="Submit">
+        </form>
+        <a class="link" href="register.html">Don't have an account? Register here.</a>
+        <a class="btn" href="index.php">Back to main menu</a>
+    </section>
+</body>
+<script>
+    function validateForm() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (email.trim() === '' || password.trim() === '') {
+            alert('Please fill all the fields.');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+</html>
