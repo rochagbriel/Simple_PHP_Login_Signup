@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 window.location.href='index.php';
             </script>";
         } else {
-            $errors[] = "Email or password are incorrect!";
+            $errors[] = "The storage file does not exist or is empty!";
         }
     }
 }

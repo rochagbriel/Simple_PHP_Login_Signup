@@ -9,13 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Check if the email field are empty
     if (empty($email)) {
         $errors[] = "Email should not be empty";
-        exit;
     }
 
     // Check if the password field are empty
     if (empty($password)) {
         $errors[] = "Password should not be empty";
-        exit;
     }
 
     // Read the file and store the content in an array
