@@ -1,5 +1,7 @@
 <?php
 
+require_once "classes/User.php";
+
 $errors = [];       // Array to store all the errors
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -20,15 +22,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif ($password !== $confirmPassword) {
         $errors[] = "The passwords do not match. Please try again.";
     } else {
-        // Hash the password
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        
+        // Create a new user object
+        $user = new User($email, $password);
 
         // Store the email and hashed password in a file
-        $data = $email . " hash: " . $hashedPassword . "\n";
-        fwrite(fopen("users.txt", "a"), $data);
+        $data = $user->getEmail() . " hash: " . $user->getPasswordHash() . "\n";
+        fwrite(fopen("users_klassen.txt", "a"), $data);
 
         // Display a success message and redirect to index.php
-        if (file_exists("users.txt") && file_get_contents("users.txt") !== "") {
+        if (file_exists("users_klassen.txt") && file_get_contents("users_klassen.txt") !== "") {
             echo 
             "<script>
                 alert('You are registered!');

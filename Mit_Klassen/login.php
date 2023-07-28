@@ -1,5 +1,7 @@
 <?php
 
+require_once "classes/User.php";
+
 $errors = [];       // Array to store all the errors
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -17,13 +19,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Read the file and store the content in an array
-    $users = file("users.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $userslist = file("users_klassen.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
     // Interate over the array and check if the user exists
     $userFound = false;
-    foreach ($users as $user) {
-        list($storedEmail, $hashedPassword) = explode(" hash: ", $user);
-        if ($email === $storedEmail && password_verify($password, $hashedPassword)) {
+    foreach ($usersList as $storedUser) {
+        list($storedEmail, $hashedPassword) = explode(" hash: ", $storedUser);
+        $user = new User($storedEmail, $password);
+        // print_r($user);
+        // die();
+        if ($email === $user->getEmail() && $user->checkPassword($password)) {
             $userFound = true;
             break;
         }
