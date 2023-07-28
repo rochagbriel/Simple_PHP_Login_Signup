@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="utf-8">
-    <meta name="description" content="This is an example of a meta description. This will often show up in search results.">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <title>BAEBECA_TEST</title>
+    <title>Test_Baebeca_MainPage</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
-
 <body>
-    <form action="">
-        <input type="email" name="email" placeholder="Email">
-        <input type="password" name="password" placeholder="Password">
-        <input type="submit" name="submit" value="Submit">
-    </form>
-    <a href="register.php">Register</a>
-    <?php
-    echo '<p>test</p>';
-    echo '<p>test</p>';
-    ?>
+    <div class="container">
+        <h1>Welcome to the Project</h1>
+        <p>Choose one task</p>
+        <ul>
+            <li><a href="register.html">Task 1</a></li>
+            <li><a href="login.html">Task 2</a></li>
+        </ul>
+    </div>
 </body>
-
 </html>
