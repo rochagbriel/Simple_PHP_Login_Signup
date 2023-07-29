@@ -1,15 +1,27 @@
 <?php
 
-require_once "classes/User.php";
+if($_SERVER["REQUEST_METHOD"] === "POST") {
 
-$errors = [];
+    require "classes/User.php";
+    
+        // Grab the form data
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+    
+        // Instantiate the User class
+        $user = new User($email, $password);
+    
+        // Call the userLogin method
+        try {
+            if ($user->userLogin()) {
+                echo "<script>alert('You are logged in!');</script>";
+                echo "<script>window.location.href='index.php';</script>";
+            }
+        } catch (Exception $e) {
+            $errors[] = $e->getMessage();
+        }
 
-try {
-    $user = new User($_POST["email"], $_POST["password"]);
-    $user->login();
-} catch (Exception $e) {
-    $errors[] = $e;
-}      
+}    
 
 ?>
 <html>
@@ -23,7 +35,7 @@ try {
         <?php if (!empty($errors)) {
             echo "<ul>";
             foreach ($errors as $error) {
-                echo "<li>$error</li>";
+                echo "<li class='error-text'>$error</li>";
             }
             echo "</ul>";
         } ?>

@@ -7,9 +7,12 @@ class User {
     private $confirmPassword;
     private $passwordHash;
 
-    public function __construct($email, $password, $confirmPassword) {
+    public function __construct($email, $password) {
         $this->email = $email;
         $this->password = $password;
+    }
+
+    public function setConfirmPassword($confirmPassword) {
         $this->confirmPassword = $confirmPassword;
     }
 
@@ -35,7 +38,7 @@ class User {
         fwrite(fopen("users_klassen.txt", "a"), $data);
 
         if (!file_exists("users_klassen.txt")) {
-            throw new Exception("The storage file does not exist or is empty!");
+            throw new Exception("The storage file does not exist!");
         }
     }
 
@@ -45,6 +48,14 @@ class User {
 
     private function emptyInput() {
         if (empty($this->email) || empty($this->password) || empty($this->confirmPassword)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private function emptyLoginInput() {
+        if (empty($this->email) || empty($this->password)) {
             return true;
         } else {
             return false;
@@ -84,6 +95,28 @@ class User {
             }
         }
         return false;
+    }
+
+    public function userLogin() {
+        if ($this->emptyLoginInput()) {
+            throw new Exception("Please fill all the fields.");
+        }
+        if ($this->invalidEmail()) {
+            throw new Exception("Please enter a valid email address.");
+        }
+        if ($this->passwordLength()) {
+            throw new Exception("The password must have at least 8 characters.");
+        }
+
+        $usersList = file("users_klassen.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($usersList as $storedUser) {
+            list($storedEmail, $hashedPassword) = explode(" hash: ", $storedUser);
+            if ($this->email === $storedEmail && password_verify($this->password, $this->hashedPassword)) {
+                return true;
+            } else {
+                throw new Exception("Email or password are incorrect!");
+            }
+        }
     }
 
 }

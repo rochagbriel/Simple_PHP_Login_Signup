@@ -10,8 +10,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         $confirmPassword = $_POST['confirmPassword'];
     
         // Instantiate the User class
-        $user = new User($email, $password, $confirmPassword);
-    
+        $user = new User($email, $password);
+        $user->setConfirmPassword($confirmPassword);
         // Call the registerUser method
         try {
             $user->registerUser();
