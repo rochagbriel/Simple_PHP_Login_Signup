@@ -13,10 +13,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     
         // Call the userLogin method
         try {
-            if ($user->userLogin()) {
-                echo "<script>alert('You are logged in!');</script>";
-                echo "<script>window.location.href='index.php';</script>";
-            }
+            $user->userLogin();
+            echo "<script>alert('You are logged in!');</script>";
+            echo "<script>window.location.href='index.php';</script>";
         } catch (Exception $e) {
             $errors[] = $e->getMessage();
         }
