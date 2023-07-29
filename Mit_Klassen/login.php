@@ -2,47 +2,15 @@
 
 require_once "classes/User.php";
 
-$errors = [];       // Array to store all the errors
+$errors = [];
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
+try {
+    $user = new User($_POST["email"], $_POST["password"]);
+    $user->login();
+} catch (Exception $e) {
+    $errors[] = $e;
+}      
 
-    // Check if the email field are empty
-    if (empty($email)) {
-        $errors[] = "Email should not be empty";
-    }
-
-    // Check if the password field are empty
-    if (empty($password)) {
-        $errors[] = "Password should not be empty";
-    }
-
-    // Read the file and store the content in an array
-    $userslist = file("users_klassen.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-    // Interate over the array and check if the user exists
-    $userFound = false;
-    foreach ($usersList as $storedUser) {
-        list($storedEmail, $hashedPassword) = explode(" hash: ", $storedUser);
-        $user = new User($storedEmail, $password);
-        // print_r($user);
-        // die();
-        if ($email === $user->getEmail() && $user->checkPassword($password)) {
-            $userFound = true;
-            break;
-        }
-    }
-
-    if ($userFound) {
-        // show a success popup message and redirect to index.php
-        echo "<script>alert('You are logged in!');</script>";
-        echo "<script>window.location.href='index.php';</script>";
-        exit;
-    } else {
-        $errors[] = "Email or password are incorrect!";
-    }
-}
 ?>
 <html>
 <head>

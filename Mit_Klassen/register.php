@@ -1,46 +1,26 @@
 <?php
 
-require_once "classes/User.php";
+if($_SERVER["REQUEST_METHOD"] === "POST") {
 
-$errors = [];       // Array to store all the errors
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    $confirmPassword = $_POST["confirmPassword"];
-
-    // Server-side validation
-    // Check if the fields are empty
-    if (empty($email) || empty($password) || empty($confirmPassword)) {
-        $errors[] = "Please fill all the fields.";
-    // Check if the email is valid
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Please enter a valid email address.";
-    // Check if the password is valid
-    } elseif (strlen($password) < 8) {
-        $errors[] = "The password must have at least 8 characters.";
-    } elseif ($password !== $confirmPassword) {
-        $errors[] = "The passwords do not match. Please try again.";
-    } else {
-        
-        // Create a new user object
-        $user = new User($email, $password);
-
-        // Store the email and hashed password in a file
-        $data = $user->getEmail() . " hash: " . $user->getPasswordHash() . "\n";
-        fwrite(fopen("users_klassen.txt", "a"), $data);
-
-        // Display a success message and redirect to index.php
-        if (file_exists("users_klassen.txt") && file_get_contents("users_klassen.txt") !== "") {
-            echo 
-            "<script>
-                alert('You are registered!');
-                window.location.href='index.php';
-            </script>";
-        } else {
-            $errors[] = "The storage file does not exist or is empty!";
+    require "classes/User.php";
+    
+        // Grab the form data
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $confirmPassword = $_POST['confirmPassword'];
+    
+        // Instantiate the User class
+        $user = new User($email, $password, $confirmPassword);
+    
+        // Call the registerUser method
+        try {
+            $user->registerUser();
+            echo "<script>alert('You are registered!');</script>";
+            echo "<script>window.location.href='index.php';</script>";
+        } catch (Exception $e) {
+            $errors[] = $e->getMessage();
         }
-    }
+
 }
 ?>
 <html>
@@ -54,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php if (!empty($errors)) {
             echo "<ul>";
             foreach ($errors as $error) {
-                echo "<li>$error</li>";
+                echo "<li class='error-text'>$error</li>";
             }
             echo "</ul>";
         } ?>
