@@ -10,11 +10,10 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         $confirmPassword = $_POST['confirmPassword'];
     
         // Instantiate the User class
-        $user = new User($email, $password);
-        $user->setConfirmPassword($confirmPassword);
+        $user = new User($email);
         // Call the registerUser method
         try {
-            $user->registerUser();
+            $user->registerUser($password, $confirmPassword);
             echo "<script>alert('You are registered!');</script>";
             echo "<script>window.location.href='index.php';</script>";
         } catch (Exception $e) {

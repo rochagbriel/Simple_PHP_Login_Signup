@@ -6,17 +6,16 @@ class User {
     private $password;
     private $confirmPassword;
     private $passwordHash;
+    public $isLoggedIn = false;
 
-    public function __construct($email, $password) {
+    public function __construct($email) {
         $this->email = $email;
+    }
+
+    public function registerUser($password, $confirmPassword) {
         $this->password = $password;
-    }
-
-    public function setConfirmPassword($confirmPassword) {
         $this->confirmPassword = $confirmPassword;
-    }
 
-    public function registerUser() {
         if ($this->emptyInput()) {
             throw new Exception("Please fill all the fields.");
         }
@@ -97,7 +96,20 @@ class User {
         return false;
     }
 
-    public function userLogin() {
+    private function authPassword() {
+        $usersList = file("users_klassen.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($usersList as $storedUser) {
+            list($storedEmail, $hashedPassword) = explode(" hash: ", $storedUser);
+            if ($this->email === $storedEmail && password_verify($this->password, $hashedPassword)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function userLogin($password) {
+        $this->password = $password;
+
         if ($this->emptyLoginInput()) {
             throw new Exception("Please fill all the fields.");
         }
@@ -107,15 +119,13 @@ class User {
         if ($this->passwordLength()) {
             throw new Exception("The password must have at least 8 characters.");
         }
-
-        $usersList = file("users_klassen.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($usersList as $storedUser) {
-            list($storedEmail, $hashedPassword) = explode(" hash: ", $storedUser);
-            if ($this->email === $storedEmail && password_verify($this->password, $this->hashedPassword)) {
-                return true;
-            } else {
-                throw new Exception("Email or password are incorrect!");
-            }
+        if (!$this->userExists($this->email)) {
+            throw new Exception("This email is not registered!");
+        }
+        if (!$this->authPassword($this->password)) {
+            throw new Exception("Email or password are incorrect!");
+        } else {
+            $this->isLoggedIn = true;
         }
     }
 

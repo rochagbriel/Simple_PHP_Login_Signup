@@ -9,13 +9,15 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         $password = $_POST['password'];
     
         // Instantiate the User class
-        $user = new User($email, $password);
+        $user = new User($email);
     
         // Call the userLogin method
         try {
-            $user->userLogin();
-            echo "<script>alert('You are logged in!');</script>";
-            echo "<script>window.location.href='index.php';</script>";
+            $user->userLogin($password);
+            if ($user->isLoggedIn) {
+                echo "<script>alert('You are logged in!');</script>";
+                echo "<script>window.location.href='index.php';</script>";
+            }
         } catch (Exception $e) {
             $errors[] = $e->getMessage();
         }
