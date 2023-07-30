@@ -35,22 +35,12 @@ class User {
 
         $data = $this->email . " hash: " . $this->passwordHash . "\n";
         // open or create the storage file
-        fopen("users_klassen.txt", "a");
-        if (!file_exists("users_klassen.txt")) {
-            throw new Exception("The storage file does not exist!");
+        if (!$fp = fopen("users_klassen.txt", "a")) {
+            throw new Exception("Error open or creating the storage file!");
         }
         // write the data to the storage file
-        fwrite(fopen("users_klassen.txt", "a"), $data);
-        if (file_get_contents("users_klassen.txt") === "") {
-            $usersList = file("users_klassen.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-                foreach ($usersList as $storedUser) {
-                list($storedEmail, $hashedPassword) = explode(" hash: ", $storedUser);
-                    if ($this->email === $storedEmail && password_verify($this->password, $hashedPassword)) {
-                        return true;
-                    } else {
-                        throw new Exception("Error while registering the user!");
-                    }
-                }
+        if (fwrite($fp, $data) === false) {
+            throw new Exception("Error writing to the storage file!");
         }
     }
 
